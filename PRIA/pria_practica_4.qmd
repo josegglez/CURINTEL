@@ -1,0 +1,59 @@
+---
+title: "pria_practica_4"
+author: "Jose García González"
+format: html
+editor: visual
+---
+
+```{r}
+
+
+data <- read_csv('datos.csv', show_col_types = FALSE)
+
+
+ejercicio1 <- function(data, pers) {
+  datafilter <- data %>% filter(Nombre %in% pers)
+  selectedRadar <- select(datafilter, Poder, Convivencia, Liante, Atractivo, Locura)
+  
+  dataNormalized <- selectedRadar %>% mutate(across(everything(), ~(. - min(.)) / (max(.) - min(.))))
+    dataNormalized$Nombre <- datafilter$Nombre
+    dataNormalized <- select(dataNormalized, Nombre, everything())
+  
+  ggradar(dataNormalized, 
+          axis.labels = c("Poder", "Convivencia", "Liante", "Atractivo", "Locura"),
+          grid.min = 0, 
+          grid.mid = 0.5, 
+          grid.max = 1,
+          grid.label.size = 4,
+          legend.text.size = 8)
+}
+
+ejercicio1(data, c("Javi", "Vicente", "Amador", "Maxi", "Coque"))
+```
+
+```{r}
+library(ggplot2)
+library(ggimg)
+library(dplyr)
+
+ejercicio2 <- function(data, pers, ruta_base) {
+  datafilter <- data %>%
+    filter(Nombre %in% pers) %>%
+    mutate(Imagen = paste0(ruta_base, "\\", Nombre, ".jpg"))
+
+  return(datafilter)
+}
+
+directory = "LQSA"
+datafilter <- ejercicio2(data, c("Javi", "Vicente", "Amador", "Maxi", "Coque"), directory)
+
+ggplot(datafilter) +
+  geom_rect_img(aes(
+    xmin = Locura - 2.8,
+    xmax = Locura + 2.8,
+    ymin = Atractivo - 1.8,
+    ymax = Atractivo + 1.8,
+    img = Imagen
+  )) +
+  theme_minimal()
+```

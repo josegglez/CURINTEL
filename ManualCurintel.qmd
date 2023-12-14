@@ -1,0 +1,393 @@
+---
+title: "Manual Curintel"
+author: Jose García González
+updated_at: 14/12/23
+format: html
+editor: visual
+---
+
+# Manual SAA-PRIA Curintel
+
+# Introducción
+
+R es un lenguaje de programación y un entorno de software para análisis estadístico, gráficos y reportes. R es ampliamente utilizado en investigación científica, análisis de datos, y áreas relacionadas, debido a su flexibilidad y su extensa colección de paquetes que permiten realizar una variedad de análisis y visualizaciones de datos.
+
+**Para instalar R:**
+
+1.  Visite [CRAN](https://cran.r-project.org/) y seleccione el sistema operativo que esté utilizando (Windows, Mac o Linux).
+
+2.  Descargue e instale la última versión de R.
+
+3.  (Opcional) Para una interfaz más amigable, instale [RStudio](https://rstudio.com/products/rstudio/download/), un IDE popular para R.
+
+# Basicos/Tipos y Entorno
+
+**Ejemplos de operaciones aritmetricas:**
+
+```{r}
+suma <- 10 + 5
+resta <- 10 - 5
+multiplicacion <- 10 * 5
+division <- 10 / 5
+
+suma; resta; multiplicacion; division
+```
+
+**Media, Mediana y Moda:**
+
+Media: Es el promedio de un conjunto de datos y se calcula sumando todos los valores y dividiendo por la cantidad de valores. Es sensible a valores extremos.
+
+Mediana: Es el valor central cuando los datos se ordenan, o el promedio de los dos valores centrales si hay un número par de datos. Menos sensible a valores extremos que la media.
+
+Moda: Es el valor o valores que aparecen con mayor frecuencia en un conjunto de datos. Útil para identificar valores comunes. No se ve afectada por valores extremos.
+
+```{r}
+numeros <- c(1, 2, 3, 4, 5, 5)
+media <- mean(numeros)
+mediana <- median(numeros)
+moda <- which.max(tabulate(match(numeros, unique(numeros))))
+
+media; mediana; moda
+```
+
+**Variables y Tipos de Datos:**
+
+```{r}
+# Variable numérica
+numero <- 123
+
+# Variable de caracteres
+texto <- "Hola mundo"
+
+# Variable lógica
+verdadero <- TRUE
+
+numero; texto; verdadero
+```
+
+**Tipos de Datos Avanzados:**
+
+Vector: Almacena elementos en una secuencia unidimensional de un mismo tipo.
+
+Matriz: Organiza datos en filas y columnas bidimensionales.
+
+Lista: Puede almacenar elementos de diferentes tipos y cambiar de tamaño dinámicamente.
+
+```{r}
+# Vector
+vector <- c(1, 2, 3, 4, 5)
+
+# Matriz
+matriz <- matrix(1:9, nrow = 3)
+
+# Lista
+lista <- list(numero = 123, texto = "Hola", logico = TRUE)
+
+vector; matriz; lista;
+```
+
+**Entorno de trabajo:**
+
+En R, el entorno de trabajo incluye todas las variables y funciones que has definido. Puedes ver tu entorno actual con **ls()** y borrarlo con **rm(list = ls()).**
+
+Los paquetes en R amplían su funcionalidad. Puedes instalar un paquete con **install.packages("nombre_del_paquete")** y cargarlo con **library(nombre_del_paquete).**
+
+**Funciones:**
+
+```{r}
+miFuncion <- function(a, b) {
+  resultado <- a + b
+  return(resultado)
+}
+
+miFuncion(5, 3)
+```
+
+```{r}
+sumar <- function(x = 1, y = 2) {
+  suma <- x + y
+  return(suma)
+}
+sumar()
+sumar(10, 20)
+```
+
+```{r}
+# Función para calcular el cuadrado
+cuadrado <- function(x) {
+  return(x^2)
+}
+
+# Usar la función con un número
+cuadrado(4)
+
+# Función con condicional
+esPositivo <- function(x) {
+  if (x > 0) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
+# Probar la función
+esPositivo(-2); esPositivo(3)
+```
+
+# Vectores
+
+Los vectores son colecciones de elementos del mismo tipo, y son una de las estructuras de datos más básicas en R.
+
+```{r}
+miVector <- c(1, 2, 3, 4, 5)
+miVector[2]  
+miVector[2] <- 10
+miVector * 2
+```
+
+```{r}
+positivos <- miVector[miVector > 0]
+
+longitud <- length(miVector)
+suma <- sum(miVector)
+media <- mean(miVector)
+
+longitud;suma;media
+```
+
+```{r}
+secuencia <- seq(1, 10, by = 2)
+repeticion <- rep(3, times = 5)
+
+mayoresQueCinco <- secuencia > 5
+todosMayores <- all(mayoresQueCinco)
+algunMayor <- any(mayoresQueCinco)
+
+logaritmos <- log(secuencia)
+desviacionEstandar <- sd(secuencia)
+
+secuencia;repeticion;mayoresQueCinco;todosMayores;algunMayor;logaritmos;desviacionEstandar
+```
+
+# Matrices
+
+Las matrices son colecciones de elementos dispuestos en una estructura de filas y columnas.
+
+```{r}
+miMatriz <- matrix(1:6, nrow = 2)
+
+miMatriz[1, 2] 
+miMatriz[1, 2] <- 10
+t(miMatriz)
+```
+
+```{r}
+otraMatriz <- matrix(1:9, nrow = 3)
+
+subMatriz <- otraMatriz[1:2, 2:3]
+sumaMatrices <- miMatriz + otraMatriz
+```
+
+```{r}
+matriz3x4 <- matrix(1:12, nrow = 3)
+colSumas <- colSums(matriz3x4)
+filaSumas <- rowSums(matriz3x4)
+
+matrizCuadrada <- matriz3x4 %*% t(matriz3x4)
+
+matrizCuadradaLog <- apply(matrizCuadrada, c(1, 2), log)
+
+matrizCuadradaLog
+```
+
+# Factores
+
+En R, un factor es un tipo de dato que se utiliza para representar variables categóricas o nominales. Los factores son especialmente útiles cuando se trabaja con datos cualitativos, como categorías, niveles o etiquetas.
+
+```{r}
+miFactor <- factor(c("bajo", "medio", "alto", "medio"))
+levels(miFactor)
+```
+
+```{r}
+temperatura <- factor(c("bajo", "alto", "medio"), order = TRUE, levels = c("bajo", "medio", "alto"))
+resumen <- summary(temperatura)
+
+numerosTemperatura <- as.numeric(levels(temperatura))[temperatura]
+
+numerosTemperatura
+```
+
+# Apply
+
+Las funciones **apply**, **lapply**, **sapply**, etc., son usadas para aplicar una función a estructuras de datos como matrices o listas.
+
+**apply** se utiliza principalmente con matrices (o data frames, que son estructuras similares). Permite aplicar una función a lo largo de filas o columnas de una matriz, especificando la dimensión (1 para filas y 2 para columnas). Devuelve un vector o matriz con los resultados de aplicar la función a cada fila o columna. lapply:
+
+**lapply** se utiliza para aplicar una función a cada elemento de una lista. Devuelve una lista que contiene los resultados de aplicar la función a cada elemento de la lista original. sapply:
+
+**sapply** es similar a lapply, pero intenta simplificar los resultados en una estructura de datos más simple (por ejemplo, un vector o matriz) si es posible. Útil cuando se desea obtener una salida más compacta que una lista.
+
+```{r}
+apply(miMatriz, 1, sum)
+apply(miMatriz, 2, sum) 
+```
+
+```{r}
+listaEjemplo <- list(a = 1:5, b = rnorm(5))
+sapply(listaEjemplo, mean)
+
+lapply(listaEjemplo, function(x) x^2)
+```
+
+```{r}
+apply(matriz3x4, 1, mean)  
+apply(matriz3x4, 2, sum)  
+
+resultadosLapply <- lapply(listaEjemplo, function(x) x * 2)
+
+resultadosSapply <- sapply(listaEjemplo, function(x) sum(x^2))
+```
+
+**Uso de funciones apply para datos estadísticos:**
+
+```{r}
+datos <- matrix(1:12, nrow = 4)
+
+promedios <- apply(datos, 2, mean)
+desviaciones <- apply(datos, 1, sd)
+
+promedios; desviaciones
+```
+
+# Manipulación de Datos
+
+Manipulación de datos se refiere a procesos de limpieza y organización de datos crudos en un formato más adecuado para análisis.
+
+```{r}
+library(dplyr)
+
+data_frame %>%
+  filter(columna1 > 1) %>%
+  arrange(columna2)
+```
+
+**GGplot:**
+
+```{r}
+library(ggplot2)
+
+ggplot(data_frame, aes(x = columna1, y = columna2)) +
+  geom_image(path = "img.jpg")
+```
+
+**DataSet:**
+
+```{r}
+data(mtcars)
+head(mtcars)
+
+summary(mtcars)
+mpg <- mtcars$mpg
+```
+
+# Variable Aleatoria
+
+En R, una variable aleatoria se representa y manipula como una función que asigna valores numéricos a resultados de un experimento aleatorio. Puede ser discreta, tomando valores aislados, o continua, abarcando un rango de valores posibles. Se utilizan para modelar incertidumbre y realizar simulaciones estadísticas, y R proporciona numerosas funciones y paquetes para trabajar con variables aleatorias, como **rnorm()** para generar números aleatorios a partir de una distribución normal o **dbinom()** para calcular probabilidades de una distribución binomial, entre otros.
+
+```{r}
+set.seed(123)
+valoresAleatorios <- rnorm(100) 
+
+hist(valoresAleatorios)
+```
+
+```{r}
+muestras_binom <- rbinom(1000, size = 10, prob = 0.3)
+
+media <- mean(muestras_binom)
+varianza <- var(muestras_binom)
+```
+
+# Teorema Central del Límite
+
+El Teorema Central del Límite (TCL) es uno de los conceptos fundamentales en estadísticas y probabilidad. Establece que, cuando se toma una muestra lo suficientemente grande de una población, la distribución de las medias de esas muestras se aproxima a una distribución normal, sin importar la forma de la distribución original de la población.
+
+```{r}
+muestras <- replicate(1000, mean(runif(30)))
+
+hist(muestras)
+
+```
+
+# Distribuciones de Probabilidad
+
+**Distribución Normal**
+
+Simétrica y en forma de campana. Se usa para variables continuas como la altura o el peso. Caracterizada por la media y la desviación estándar.
+
+```{r}
+normal <- rnorm(1000, mean = 0, sd = 1)
+hist(normal)
+```
+
+**Distribución Binomial**
+
+Se usa para contar el número de éxitos en un número fijo de ensayos independientes. Útil en experimentos con dos resultados posibles, como lanzamientos de monedas. Parámetros clave: número de ensayos (n) y probabilidad de éxito (p).
+
+```{r}
+binomial <- rbinom(1000, size = 10, prob = 0.5)
+hist(binomial)
+```
+
+**Distribución Poisson**
+
+Modela eventos raros en un intervalo de tiempo o espacio fijo. Útil para contar eventos como llamadas telefónicas en un período. Parámetro principal: tasa promedio de eventos (λ).
+
+```{r}
+poisson <- rpois(1000, lambda = 3)
+hist(poisson)
+```
+
+# Covarianza y Correlación
+
+**Covarianza**: Mide cómo dos variables cambian juntas, pero su magnitud es difícil de interpretar.
+
+**Correlación**: Mide la relación lineal entre dos variables, con valores entre -1 y 1. Es más interpretable y se usa comúnmente para analizar la relación entre variables.
+
+```{r}
+# Covarianza
+covarianza <- cov(mtcars$mpg, mtcars$disp)
+
+# Correlación
+correlacion <- cor(mtcars$mpg, mtcars$disp)
+
+covarianza; correlacion
+```
+
+# Tipos de Diagramas
+
+**Densidad:**
+
+Muestra cómo se agrupan los valores en una variable continua y su probabilidad en intervalos.
+
+```{r}
+plot(density(normal))
+```
+
+**Caja-Bigote:**
+
+Resalta la dispersión y los valores atípicos en una variable numérica mediante un rectángulo central y líneas que representan cuartiles.
+
+```{r}
+boxplot(mtcars$mpg, mtcars$cyl)
+```
+
+**Violín:**
+
+Combina un diagrama de caja con una representación de densidad, ofreciendo información detallada sobre la distribución y variabilidad de los datos.
+
+```{r}
+library(ggplot2)
+ggplot(mtcars, aes(factor(cyl), mpg)) + geom_violin()
+```
