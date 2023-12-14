@@ -1,0 +1,214 @@
+---
+title: "saa_practica_02"
+author: "Jose García González"
+format: html
+editor: visual
+---
+
+# **Fundamentos de estadística y probabilidad para Data Science**
+
+# **1. Distribución Logística**
+
+1.1 Siguiendo un esquema similar al de los apuntes de las distribuciones de probabilidad contínuas, elabora un documento donde se describa la función logística y sus casos de uso.
+
+**La función logística es una fórmula matemática que se utiliza principalmente para describir cómo algo cambia con el tiempo o reacciona a otras variables.**
+
+**Esto es especialmente útil cuando los cambios no son constantes sino variables, como comenzar lentamente, aumentar rápidamente y luego disminuir nuevamente.**
+
+**La fórmula básica de la función logística es: f(x)=1+e−x1​ Aquí, e es una constante matemática (aproximadamente 2,718) y x es el valor que estamos considerando.**
+
+**Casos de uso:**
+
+***Modelado de probabilidad:*** **Se utiliza en estadística para modelar situaciones en las que sólo hay dos resultados posibles (como sí o no).**
+
+***Inteligencia Artificial:*** **Forma parte de algoritmos de aprendizaje automático, para clasificar información.**
+
+1.2 Realiza la representación gráfica de su función de densidad
+
+```{r}
+x <- seq(-10, 10, by = 0.1)
+plot(x, dlogis(x), type = "l", col = "blue", xlab = "x", ylab = "Densidad")
+```
+
+1.3 Explica y pon ejemplos de cómo se generan números aleatorios con la función logística.
+
+**Para generar números aleatorios siguiendo una distribución logística, utilizaremos rlogis()**
+
+```{r}
+rand1 <- rlogis(100)
+rand1
+```
+
+1.4 Realiza un par de ejemplos de cálculo de probabilidades a partir de la función de distribución acumulada.
+
+```{r}
+plogis(0)
+plogis(2)
+```
+
+# **2. Distribución t-student**
+
+2.1 Siguiendo un esquema similar al de los apuntes de las distribuciones de probabilidad contínuas, elabora un documento donde se describa la función t-student y sus casos de uso.
+
+**La función t-Student es otra fórmula matemática utilizada en estadística. Se utiliza principalmente para analizar pequeñas muestras de datos. Esto es muy útil cuando no tenemos mucha información pero aún queremos estimar o verificar esta información.**
+
+**La función t-Student es similar a la función de distribución normal (una curva de campana que se encuentra comúnmente en estadística), pero tiene una forma ligeramente diferente, por lo que es más adecuada para muestras pequeñas.**
+
+**La fórmula básica para la distribución t-Student depende de los grados de libertad (que están relacionados con el tamaño de la muestra) y parece ser más complicada que la función logística. Sin embargo, la idea principal es que nos ayuda a comprender cómo se distribuyen los datos cuando se trabaja con muestras pequeñas.**
+
+**Casos de uso:**
+
+***Pruebas de hipótesis en estadística:*** **Cuando queremos comparar la media de una pequeña muestra de datos con un valor conocido o con otra muestra, usamos la función t-Student. Esto es común en investigaciones donde se pueden recopilar pocos datos.**
+
+***Estimar el intervalo de confianza:*** **Para entender cuánto podemos esperar que varíen los resultados de nuestra muestra. Esto es importante en campos como la medicina o la psicología, donde las muestras suelen ser pequeñas.**
+
+2.2 Realiza la representación gráfica de su función de densidad.
+
+```{r}
+x <- seq(-5, 5, by = 0.1)
+plot(x, dt(x, df = 10), type = "l", col = "red",xlab = "x", ylab = "Densidad")
+```
+
+2.3 Explica y pon ejemplos de cómo se generan números aleatorios.
+
+```{r}
+rand2 <- rt(100, df = 10)
+rand2
+```
+
+2.4 Realiza un par de ejemplos de cálculo de probabilidades a partir de la función de distribución acumulada.
+
+```{r}
+pt(0, df = 10)
+pt(2, df = 10)
+```
+
+2.5 Realiza una comparativa visual entre la normal y la t-student, representando la normal frente a la t-student para 2, 5, 15 y 25 grados de libertad de la t-student, o los que consideres para una visualización didáctica.
+
+```{r}
+library(ggplot2)
+
+graph <- function(df) {
+  x <- seq(-4, 4, length.out = 100)
+  data <- data.frame(x, dt(x, df), dt(x, df))
+  ggplot(data, aes(x)) + 
+    geom_line(aes(y = dnorm(x), colour = "Normal")) +
+    geom_line(aes(y = dt(x, df), colour = paste("t-Student (", df, " grados de libertad)", sep=""))) +
+    ggtitle(paste("Comparación: Normal vs. t-Student con ", df, " grados de libertad", sep="")) +
+    xlab("Valor") +
+    ylab("Densidad") +
+    theme_minimal() +
+    scale_colour_manual(values = c("blue", "red"))
+}
+
+glibertad <- c(2, 5, 15, 25)
+for (df in glibertad) {
+  print(graph(df))
+}
+```
+
+# **3. Distribución uniforme discreta**
+
+Implementa tu versión de las funciones `punifd`, `runifd`, y `dunifd`
+
+```{r}
+runifd <- function(n, min, max) {
+  sample(min:max, n, replace = TRUE)
+}
+
+ran3 <- runifd(10, 1, 6)
+print(ran3)
+```
+
+# **4. Distribución multinomial**
+
+4.1 Siguiendo un esquema similar al de los apuntes de las distribuciones de probabilidad discretas, elabora un documento donde se describa la función multinomial.
+
+**La distribución multinomial es una extensión de la distribución binomial. Mientras que la distribución binomial se utiliza para eventos que tienen dos resultados posibles (como sí o no), la distribución multinomial se aplica cuando hay más de dos resultados posibles.**
+
+**Una distribución polinómica se refiere a la probabilidad de obtener un conjunto particular de resultados en una serie de pruebas o experimentos, donde cada prueba tiene una cantidad de resultados posibles.**
+
+**La fórmula de distribución polinómica depende del número de veces que se espera cada resultado y de la probabilidad de cada resultado.**
+
+**Casos de uso:**
+
+***Analizar encuestas y datos categóricos:*** **Se utiliza en estadísticas para analizar datos donde las respuestas pueden clasificarse en múltiples categorías, como encuestas de opinión.**
+
+***Investigación en ciencias sociales y de salud:*** **Estudiar la frecuencia de diferentes tipos de respuesta en un conjunto de datos.**
+
+***Modelos predictivos en inteligencia artificial:*** **En aprendizaje automático, para clasificar datos en más de dos categorías.**
+
+4.2 Explica y pon ejemplos de cómo se generan números aleatorios siguiendo su función de densidad.
+
+**Para crear valores aleatorios lo que haremos será utilizar la funcion rmultinom(n_ensayos,tamaño,probabilidades)**
+
+```{r}
+r4 <- rmultinom(10, 1, prob = c(0.2, 0.5, 0.3))
+print(r4)
+```
+
+4.3 Realiza un par de ejemplos de cálculo de probabilidades a partir de la función de distribución acumulada.
+
+**Distribución Normal**
+
+```{r}
+pnorm(1.5, 0, 1)
+```
+
+**Distribución Binomial**
+
+```{r}
+pbinom(5, 10, 0.5)
+```
+
+# **5. Distribución de Poisson**
+
+5.1 Siguiendo un esquema similar al de los apuntes de las distribuciones de probabilidad discretas, elabora un documento donde se describa la función de distribución de probabilidad de Poisson
+
+**La distribución de Poisson es una distribución de probabilidad discreta que representa la probabilidad de que ciertos eventos ocurran dentro de un período fijo de tiempo o espacio, dado que estos eventos ocurren a una tasa promedio sin cambios e independientes entre sí.**
+
+**Fórmula de distribución de Poisson P(X=k)=k!e−λλk​en la cual: e es la base del logaritmo natural.**
+
+**λ es la tasa de eventos promedio por período de tiempo.**
+
+**k es el número de evento.**
+
+**k!**
+
+**es el factorial de k.**
+
+**Casos de Uso:**
+
+***Telecomunicaciones:*** **Cuenta el número de llamadas que recibe el call center en una hora.**
+
+***Biología y medicina:*** **Modelización del número de mutaciones en una secuencia de ADN o del número de bacterias en una muestra.**
+
+***Gestión de inventario:*** **Predice la cantidad de artículos que se estropearán en un período de tiempo determinado.**
+
+5.2 Explica su relación con la distribución exponencial.
+
+**Principales características de la relación Tiempo entre eventos: En un proceso de Poisson, el tiempo entre eventos consecutivos sigue una distribución exponencial.**
+
+**Tasa de eventos: La tasa (λ) en la distribución de Poisson es la inversa de la media de la distribución exponencial.**
+
+**Independencia de eventos: En ambos casos, los eventos se consideran independientes entre sí.**
+
+5.3 Realiza un par de ejemplos de cálculo de probabilidades a partir de la función de distribución acumulada.
+
+**Tasa de eventos (λ)**
+
+```{r}
+lambda <- 3 
+```
+
+**Probabilidad de 0**
+
+```{r}
+dpois(0, lambda) 
+```
+
+**Probabilidad de 2 o menos**
+
+```{r}
+ppois(2, lambda)
+```
