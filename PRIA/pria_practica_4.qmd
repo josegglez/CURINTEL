@@ -8,7 +8,7 @@ editor: visual
 ```{r}
 
 
-data <- read_csv('datos.csv', show_col_types = FALSE)
+data <- read_csv('lqsadatos.csv', show_col_types = FALSE)
 
 
 ejercicio1 <- function(data, pers) {
